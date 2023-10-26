@@ -1,3 +1,4 @@
+import Notiflix from 'notiflix';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 
@@ -22,7 +23,7 @@ button.addEventListener('click', async (event) => {
         }
     }
     catch(error){
-        console.log(error.message);
+        Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
     }
 });
 
