@@ -2,10 +2,14 @@ import Notiflix from 'notiflix';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 
-const form = document.querySelector('#search-form');
-const input = form.querySelector('input');
-const button = form.querySelector('button');
-const gallery = document.querySelector('.gallery');
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('#search-form');
+    const input = form.querySelector('input');
+    const button = form.querySelector('button');
+    const loadMore = document.querySelector('.load-more');
+    const gallery = document.querySelector('.gallery');
+});
+
 
 let searchInput = '';
 input.addEventListener('input', () => {
@@ -15,22 +19,32 @@ input.addEventListener('input', () => {
 button.addEventListener('click', async (event) => {
     event.preventDefault()
     try{
-        const searchResults = await search();
+        const searchResults = await search(40, 1);
         list (searchResults);
         libraryForGallery();
         if(!gallery.firstChild){
-            console.log(error);
+            return false;
         }
     }
-    catch(error){
+    catch{
         Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
     }
 });
 
+loadMore.addEventListener('click', async () => {
+    console.log(1);
+    try{
+        const moreResults = await search(20, 2);
+        list(moreResults);
+        libraryForGallery();
+    }
+    catch{
+        Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+    }
+})
 
-
-async function search(){
-    const  answer = await fetch(`https://pixabay.com/api/?key=40289268-709deefe1360f0520e7e421a0&q=${searchInput}&image_type=photo&orientation=horizontal&safesearch=true`);
+async function search(perPage, page){
+    const  answer = await fetch(`https://pixabay.com/api/?key=40289268-709deefe1360f0520e7e421a0&q=${searchInput}&image_type=photo&orientation=horizontal&safesearch=true&per_page=${perPage}&page=${page}`);
     const result = await answer.json();
     return result.hits;
 };
