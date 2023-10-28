@@ -1,3 +1,8 @@
+.conainer{
+    width: 100%;
+    max-width: 100%;
+}
+
 .visually-hidden {
     position: absolute;
     width: 1px;
@@ -9,4 +14,33 @@
     clip-path: inset(100%);
     clip: rect(0 0 0 0);
     overflow: hidden;
+}
+
+.gallery{
+    margin: 10px;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.photo-card{
+    width:calc((100% - 60px)/4);
+    min-height: calc((100% - 80px)/5);
+}
+
+.photo-card > a{
+    min-height: 100%;
+}
+
+.photo-card > a > img{
+    object-fit: cover;
+    max-width: 100%;
+}
+
+.info{
+    display: flex;
+    height: 20px;
+}
+.info-item{
+    max-width: 100;
 }

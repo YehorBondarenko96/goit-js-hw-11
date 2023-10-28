@@ -12,6 +12,7 @@ const gallery = document.querySelector('.gallery');
 let item = '';
 let page = 1;
 const dataResult = {};
+let allResultPages = 0;
 
 let searchInput = '';
 input.addEventListener('input', () => {
@@ -22,10 +23,10 @@ button.addEventListener('click', async (event) => {
     event.preventDefault();
     loadMore.classList.add('visually-hidden');
     try{
+        loadMore.classList.remove('visually-hidden');
         page = 1;
         await search(40, page);
         const searchResults = dataResult.responses;
-        console.log(dataResult.numberOfResponses);
         list (searchResults);
         gallery.innerHTML = item;
         libraryForGallery();
@@ -33,7 +34,6 @@ button.addEventListener('click', async (event) => {
         if(!gallery.firstChild){
             return error;
         }
-        loadMore.classList.remove('visually-hidden');
     }
     catch(error){
         Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
@@ -45,7 +45,6 @@ loadMore.addEventListener('click', async () => {
         page += 1;
         await search(20, page);
         const moreResults = dataResult.responses;
-        console.log(dataResult.numberOfResponses);
         list(moreResults);
         gallery.insertAdjacentHTML('beforeend', item);
         libraryForGallery();
@@ -58,8 +57,14 @@ loadMore.addEventListener('click', async () => {
 async function search(perPage, page){
     const  answer = await fetch(`https://pixabay.com/api/?key=40289268-709deefe1360f0520e7e421a0&q=${searchInput}&image_type=photo&orientation=horizontal&safesearch=true&per_page=${perPage}&page=${page}`);
     const result = await answer.json();
-    dataResult.numberOfResponses = result.totalHits,
+    allResultPages += result.hits.length;
+    if(allResultPages >= result.totalHits){
+        loadMore.classList.add('visually-hidden');
+        console.log("We're sorry, but you've reached the end of search results.");
+    }
+    console.log(result.totalHits);
     dataResult.responses = result.hits;
+    console.log(allResultPages);
 };
 
 function list (searchResults){ 
