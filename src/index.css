@@ -38,9 +38,23 @@
 }
 
 .info{
-    display: flex;
-    height: 20px;
+    height: 40px;
 }
+
+.info ul{
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    padding: 0;
+    margin: 10 0;
+}
+
 .info-item{
     max-width: 100;
+    margin: 0;
+}
+
+.info-value{
+    flex-grow: 1;
+    text-align: center;
 }

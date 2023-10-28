@@ -62,9 +62,7 @@ async function search(perPage, page){
         loadMore.classList.add('visually-hidden');
         console.log("We're sorry, but you've reached the end of search results.");
     }
-    console.log(result.totalHits);
     dataResult.responses = result.hits;
-    console.log(allResultPages);
 };
 
 function list (searchResults){ 
@@ -75,22 +73,32 @@ function list (searchResults){
     <img src="${searchResult.webformatURL}" alt="${searchResult.tags}" loading="lazy" />
     </a>
     <div class="info">
+    <ul>
+        <li>
         <p class="info-item">
-            <b>Likes</b>
-            ${searchResult.likes}
+            <b>Likes</b><br>
+            <span class="info-value">${searchResult.likes}</span>
         </p>
+        </li>
+        <li>
         <p class="info-item">
-            <b>Views</b>
-            ${searchResult.views}
+            <b>Views</b><br>
+            <span class="info-value">${searchResult.views}</span>
         </p>
+        </li>
+        <li>
         <p class="info-item">
-            <b>Comments</b>
-            ${searchResult.comments}
+            <b>Comments</b><br>
+            <span class="info-value">${searchResult.comments}</span>
         </p>
+        </li>
+        <li>
         <p class="info-item">
-            <b>Downloads</b>
-            ${searchResult.downloads}
+            <b>Downloads</b><br>
+            <span class="info-value">${searchResult.downloads}</span>
         </p>
+        </li>
+    </ul>    
     </div>
     </div>`
 )
