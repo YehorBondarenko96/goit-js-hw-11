@@ -24,17 +24,20 @@
 }
 
 .photo-card{
+    display: flex;
+    flex-direction: column;
     width:calc((100% - 60px)/4);
     min-height: calc((100% - 80px)/5);
 }
 
 .photo-card > a{
-    min-height: 100%;
-}
+    flex: 1;
+} 
 
 .photo-card > a > img{
     object-fit: cover;
     max-width: 100%;
+    min-height: 100%;
 }
 
 .info{
