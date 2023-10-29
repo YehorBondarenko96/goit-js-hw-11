@@ -31,9 +31,9 @@ input.addEventListener('input', () => {
 
 button.addEventListener('click', async (event) => {
     event.preventDefault();
-    loadMore.classList.add('visually-hidden');
+    //loadMore.classList.add('visually-hidden');
     try{
-        loadMore.classList.remove('visually-hidden');
+        //loadMore.classList.remove('visually-hidden');
         page = 1;
         await search(40, page);
         const searchResults = dataResult.responses;
@@ -43,6 +43,7 @@ button.addEventListener('click', async (event) => {
         Notiflix.Notify.success(`Hooray! We found ${dataResult.totalHits} images.`);
         page = 2;
         smoothScroll();
+        window.addEventListener('scroll', infiniteScroll);
         if(!gallery.firstChild){
             return error;
         }
@@ -52,27 +53,15 @@ button.addEventListener('click', async (event) => {
     }
 });
 
-loadMore.addEventListener('click', async () => {
-    try{
-        page += 1;
-        await search(20, page);
-        const moreResults = dataResult.responses;
-        list(moreResults);
-        gallery.insertAdjacentHTML('beforeend', item);
-        library.refresh();
-        smoothScroll();
-    }
-    catch{
-        Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
-    }
-})
+//loadMore.addEventListener('click', loadMoreItems);
 
 async function search(perPage, page){
     const  answer = await fetch(`https://pixabay.com/api/?key=40289268-709deefe1360f0520e7e421a0&q=${searchInput}&image_type=photo&orientation=horizontal&safesearch=true&per_page=${perPage}&page=${page}`);
     const result = await answer.json();
     allResultPages += result.hits.length;
     if(allResultPages >= result.totalHits){
-        loadMore.classList.add('visually-hidden');
+        //loadMore.classList.add('visually-hidden');
+        window.removeEventListener('scroll', infiniteScroll);
         Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.");
     }
     dataResult.responses = result.hits;
@@ -129,3 +118,25 @@ window.scrollBy({
     behavior: "smooth",
 });
 };
+
+async function loadMoreItems(){
+    try{
+        page += 1;
+        await search(20, page);
+        const moreResults = dataResult.responses;
+        list(moreResults);
+        gallery.insertAdjacentHTML('beforeend', item);
+        library.refresh();
+        smoothScroll();
+    }
+    catch{
+        Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+    }
+};
+
+const infiniteScroll = () => {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+        loadMoreItems();
+    }
+    };
+
