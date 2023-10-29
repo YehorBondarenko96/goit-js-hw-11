@@ -16,7 +16,7 @@ const library  = new SimpleLightbox('.gallery a',  options );
 const form = document.querySelector('#search-form');
 const input = form.querySelector('input');
 const button = form.querySelector('button');
-const loadMore = document.querySelector('.load-more');
+//const loadMore = document.querySelector('.load-more');
 const gallery = document.querySelector('.gallery');
 
 let item = '';
