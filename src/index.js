@@ -2,6 +2,16 @@ import Notiflix from 'notiflix';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 
+const options = {
+    captions: true,
+    captionSelector: 'img',
+    captionsData: 'alt',
+    captionPosition: 'bottom',
+    captionDelay: 250,
+    close: false, 
+};
+const library  = new SimpleLightbox('.gallery a',  options );
+
 
 const form = document.querySelector('#search-form');
 const input = form.querySelector('input');
@@ -29,9 +39,10 @@ button.addEventListener('click', async (event) => {
         const searchResults = dataResult.responses;
         list (searchResults);
         gallery.innerHTML = item;
-        libraryForGallery();
+        library.refresh();
         Notiflix.Notify.success(`Hooray! We found ${dataResult.totalHits} images.`);
         page = 2;
+        smoothScroll();
         if(!gallery.firstChild){
             return error;
         }
@@ -48,7 +59,8 @@ loadMore.addEventListener('click', async () => {
         const moreResults = dataResult.responses;
         list(moreResults);
         gallery.insertAdjacentHTML('beforeend', item);
-        libraryForGallery();
+        library.refresh();
+        smoothScroll();
     }
     catch{
         Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
@@ -108,14 +120,21 @@ function list (searchResults){
 return item;
 };
 
-function libraryForGallery(){
-const options = {
-    captions: true,
-    captionSelector: 'img',
-    captionsData: 'alt',
-    captionPosition: 'bottom',
-    captionDelay: 250,
-    close: false, 
-};
-const library  = new SimpleLightbox('.gallery a',  options );
+async function smoothScroll(){
+    // const images = gallery.querySelectorAll('img');
+    //     const imagePromises = Array.from(images).map(image => {
+    //         return new Promise(resolve => {
+    //             image.onload = resolve;
+    //             image.onerror = resolve;
+    //         });
+    //     });
+    //     await Promise.all(imagePromises);
+const { height: cardHeight } = document
+    .querySelector(".gallery")
+    .firstElementChild.getBoundingClientRect();
+
+window.scrollBy({
+    top: cardHeight * 2,
+    behavior: "smooth",
+});
 };
