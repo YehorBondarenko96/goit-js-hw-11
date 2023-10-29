@@ -30,6 +30,7 @@ button.addEventListener('click', async (event) => {
         list (searchResults);
         gallery.innerHTML = item;
         libraryForGallery();
+        Notiflix.Notify.success(`Hooray! We found ${dataResult.totalHits} images.`);
         page = 2;
         if(!gallery.firstChild){
             return error;
@@ -60,9 +61,10 @@ async function search(perPage, page){
     allResultPages += result.hits.length;
     if(allResultPages >= result.totalHits){
         loadMore.classList.add('visually-hidden');
-        console.log("We're sorry, but you've reached the end of search results.");
+        Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.");
     }
     dataResult.responses = result.hits;
+    dataResult.totalHits = result.totalHits;
 };
 
 function list (searchResults){ 
