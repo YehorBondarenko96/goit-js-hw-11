@@ -120,18 +120,9 @@ function list (searchResults){
 return item;
 };
 
-async function smoothScroll(){
-    // const images = gallery.querySelectorAll('img');
-    //     const imagePromises = Array.from(images).map(image => {
-    //         return new Promise(resolve => {
-    //             image.onload = resolve;
-    //             image.onerror = resolve;
-    //         });
-    //     });
-    //     await Promise.all(imagePromises);
-const { height: cardHeight } = document
-    .querySelector(".gallery")
-    .firstElementChild.getBoundingClientRect();
+function smoothScroll(){
+    
+const { height: cardHeight } = gallery.firstElementChild.getBoundingClientRect();
 
 window.scrollBy({
     top: cardHeight * 2,
