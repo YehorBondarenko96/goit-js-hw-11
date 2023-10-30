@@ -56,6 +56,9 @@ button.addEventListener('click', async (event) => {
 //loadMore.addEventListener('click', loadMoreItems);
 
 async function search(perPage, page){
+    if(searchInput === ""){
+        
+    } else{
     const  answer = await fetch(`https://pixabay.com/api/?key=40289268-709deefe1360f0520e7e421a0&q=${searchInput}&image_type=photo&orientation=horizontal&safesearch=true&per_page=${perPage}&page=${page}`);
     const result = await answer.json();
     allResultPages += result.hits.length;
@@ -66,6 +69,7 @@ async function search(perPage, page){
     }
     dataResult.responses = result.hits;
     dataResult.totalHits = result.totalHits;
+}
 };
 
 function list (searchResults){ 
