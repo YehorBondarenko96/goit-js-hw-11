@@ -57,7 +57,8 @@ button.addEventListener('click', async (event) => {
 
 async function search(perPage, page){
     if(searchInput === ""){
-        
+        gallery.innerHTML = '';
+        return error
     } else{
     const  answer = await fetch(`https://pixabay.com/api/?key=40289268-709deefe1360f0520e7e421a0&q=${searchInput}&image_type=photo&orientation=horizontal&safesearch=true&per_page=${perPage}&page=${page}`);
     const result = await answer.json();
