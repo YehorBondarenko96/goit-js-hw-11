@@ -1,3 +1,7 @@
+body{
+    margin: 0;
+}
+
 .conainer{
     width: 100%;
     max-width: 100%;
@@ -14,6 +18,36 @@
     clip-path: inset(100%);
     clip: rect(0 0 0 0);
     overflow: hidden;
+}
+
+.form-div{
+    background-color: #0000FF;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-form{
+    margin: 0;
+    display: flex;
+}
+
+.search-form input{
+    border: 0;
+    flex: 1;
+}
+
+.search-form input:hover,
+.search-form input:focus{
+    outline: none;
+}
+
+.search-form button{
+    border: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .gallery{
