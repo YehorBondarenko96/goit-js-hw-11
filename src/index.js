@@ -1,3 +1,5 @@
+import axios from "axios";
+import debounce from 'lodash/debounce';
 import Notiflix from 'notiflix';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
@@ -23,6 +25,7 @@ let item = '';
 let page = 1;
 const dataResult = {};
 let allResultPages = 0;
+let scrolled = false;
 
 let searchInput = '';
 input.addEventListener('input', () => {
@@ -31,6 +34,9 @@ input.addEventListener('input', () => {
 
 button.addEventListener('click', async (event) => {
     event.preventDefault();
+    window.removeEventListener('wheel', forLittleResult);
+    scrolled = false;
+    allResultPages = 0;
     //loadMore.classList.add('visually-hidden');
     try{
         //loadMore.classList.remove('visually-hidden');
@@ -40,12 +46,13 @@ button.addEventListener('click', async (event) => {
         list (searchResults);
         gallery.innerHTML = item;
         library.refresh();
-        Notiflix.Notify.success(`Hooray! We found ${dataResult.totalHits} images.`);
-        page = 2;
-        smoothScroll();
-        window.addEventListener('scroll', infiniteScroll);
         if(!gallery.firstChild){
-            return error;
+            return error
+        } else{
+            Notiflix.Notify.success(`Hooray! We found ${dataResult.totalHits} images.`);
+            page = 2;
+            smoothScroll();
+            window.addEventListener('scroll', infiniteScroll);
         }
     }
     catch(error){
@@ -60,13 +67,17 @@ async function search(perPage, page){
         gallery.innerHTML = '';
         return error
     } else{
-    const  answer = await fetch(`https://pixabay.com/api/?key=40289268-709deefe1360f0520e7e421a0&q=${searchInput}&image_type=photo&orientation=horizontal&safesearch=true&per_page=${perPage}&page=${page}`);
-    const result = await answer.json();
+    const  answer = await axios.get(`https://pixabay.com/api/?key=40289268-709deefe1360f0520e7e421a0&q=${searchInput}&image_type=photo&orientation=horizontal&safesearch=true&per_page=${perPage}&page=${page}`);
+    const result = await answer.data;
     allResultPages += result.hits.length;
-    if(allResultPages >= result.totalHits){
+    if(allResultPages >= result.totalHits && result.totalHits > 0){
         //loadMore.classList.add('visually-hidden');
         window.removeEventListener('scroll', infiniteScroll);
+        if(!scrolled){
+        window.addEventListener('wheel', forLittleResult);
+    } else{
         Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.");
+    }
     }
     dataResult.responses = result.hits;
     dataResult.totalHits = result.totalHits;
@@ -140,8 +151,17 @@ async function loadMoreItems(){
 };
 
 const infiniteScroll = () => {
+    scrolled = true;
     if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
         loadMoreItems();
     }
     };
 
+const forLittleResult = 
+    debounce(() => {
+        Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.");
+}, 500,
+{
+    leading: true,
+    trailing: false,
+});    
